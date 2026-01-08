@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
     int circuitDepth = 11;
     int dcrtBits = 50;
     int firstMod = 54;
-    double initVal = 0.4501;
+    double initVal = 0.501;
     int digitSize = 4;
     vector<uint32_t> levelBudget = {3, 3};
     int serialize = true;
