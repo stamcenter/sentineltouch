@@ -60,9 +60,9 @@ To build the docker image.
 ```
 docker build -t sentineltouch .
 docker run  sentineltouch # run the default entry which is hybrid_16
-docker run ./hybrid_32 sentineltouch # run the hybrid 32 entry point
-docker run ./lenet5_16 sentineltouch # run the full lenet 16 embeddings 32 entry point
-docker run ./lenet5 sentineltouch # run the full-pipeline with 32 embedding space. 
+docker run sentineltouch hybrid_32  # run the hybrid 32 entry point
+docker run sentineltouch lenet5_16 # run the full lenet 16 embeddings 32 entry point
+docker run sentineltouch lenet5_32 # run the full-pipeline with 32 embedding space. 
 
 
 docker run sentineltouch python pca_1_to_N_authentication.py # run the python module for training and validation of model
