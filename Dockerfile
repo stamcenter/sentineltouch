@@ -47,16 +47,13 @@ RUN apt-get update && apt-get install -y \
 
 COPY --from=openfhe-build /usr/local /usr/local
 
-WORKDIR /opt
-
-# Clone repo into sentineltouchartifact
-RUN git clone http://gitlab.ascslab-members.org/ngesbrian/sentineltouchartifact.git
-
-# Rename folder to "sentineltouch"
-RUN mv sentineltouchartifact sentineltouch
-
 WORKDIR /opt/sentineltouch
 
+# Copy source code
+COPY src /opt/sentineltouch/src
+COPY CMakeLists.txt /opt/sentineltouch/
+
+# Build the project
 RUN rm -rf build && mkdir build && cd build && \
     cmake .. \
         -DCMAKE_C_COMPILER=clang \
@@ -87,14 +84,15 @@ COPY --from=openfhe-build /usr/local /usr/local
 # Copy built C++ binaries and source
 COPY --from=sentinel-build /opt/sentineltouch /opt/sentineltouch
 
-# Copy all data directories (preserve full structure)
+# Copy all data directories (with conditional handling for empty dirs)
 COPY embedding_csv /opt/sentineltouch/embedding_csv
-COPY encrypted_db /opt/sentineltouch/encrypted_db
-COPY encrypted_users /opt/sentineltouch/encrypted_users
 COPY exported_images /opt/sentineltouch/exported_images
 COPY images /opt/sentineltouch/images
 COPY trained_models /opt/sentineltouch/trained_models
 COPY python /opt/sentineltouch/python
+
+# Create empty directories that might not have files
+RUN mkdir -p /opt/sentineltouch/encrypted_db /opt/sentineltouch/encrypted_users
 
 # Install Python dependencies
 COPY requirements.txt /opt/sentineltouch/
