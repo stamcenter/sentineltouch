@@ -37,7 +37,7 @@ sudo make install
 ## Setup SentinelTouch using this command:
 
 ```
-git clone http://gitlab.ascslab-members.org/ngesbrian/sentineltouch.git
+git clone https://github.com/stamcenter/sentineltouch.git
 cd sentineltouch
 mkdir build
 cd build
