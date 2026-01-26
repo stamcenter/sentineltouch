@@ -89,6 +89,7 @@ COPY embedding_csv /opt/sentineltouch/embedding_csv
 COPY exported_images /opt/sentineltouch/exported_images
 COPY images /opt/sentineltouch/images
 COPY trained_models /opt/sentineltouch/trained_models
+COPY weights /opt/sentineltouch/weights
 COPY python /opt/sentineltouch/python
 
 # Create empty directories that might not have files
