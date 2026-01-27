@@ -108,6 +108,9 @@ make
 Run the build from the SentinelTouch for results
 ```
 ./hybrid_16
+./hybrid_32
+./lenet5_16
+./lenet5_32
 ```
 Each binary produces the following outputs:
 
@@ -117,16 +120,15 @@ Each binary produces the following outputs:
 - It registers users into the encrypted database. For each user during registration, the time required for feature extraction and registration is reported.
 - During the identification phase, for each user, the output indicates whether the user was correctly predicted. It also reports the time required to identify the user and the time required to interpret the results.
 
-These results are summarized in Table 3 and Table 4.
+These results summarized in Table 3 and Table 4 are avaraged for a single random user over 10 runs. 
+
 
 
 Run a Python evaluation script (inside `python/`):
 
-
 ```
-python3 python/pca_1_to_N_authentication.py
+python3 python/pca_1_to_N_authentication.py    # The results of this script shows the accuracies reported in Table 2.
 ```
-The results of this script shows you the accuracy reported in Table 2.
 
 `
 python3 python3/exportAllWeights.py # export weights int the weights folder needed for encrypted inference
@@ -147,7 +149,6 @@ docker run sentineltouch lenet5_32 # run the full-pipeline with 32 embedding spa
 
 
 docker run sentineltouch python pca_1_to_N_authentication.py # run the python module for training and validation of model
-# docker run sentineltouch python exportAllWeights.py # run the python module to export all weights
 ```
 
 Note: the `docker-entrypoint.sh` supports aliases such as `hybrid_16`, `hybrid_32`, `lenet5_16`, `lenet5_32`, and `python`.
