@@ -58,6 +58,8 @@ Run the build from the SentinelTouch for results
 To build the docker image.
 
 ```
+git clone https://github.com/stamcenter/sentineltouch.git
+cd sentineltouch
 docker build -t sentineltouch .
 docker run  sentineltouch # run the default entry which is hybrid_16
 docker run sentineltouch hybrid_32  # run the hybrid 32 entry point
@@ -70,3 +72,8 @@ docker run sentineltouch python exportAllWeights.py # run the python module to e
 
 
 ```
+
+
+
+### Additonal Information
+If you have other processes running on your system while building the Docker image, you can edit the `Dockerfile` and limit the number of cores used for the build. For example, change `make -j$(nproc)` to `make -j4`, which should work just fine.

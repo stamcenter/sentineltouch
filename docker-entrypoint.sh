@@ -20,6 +20,12 @@ if [ "$1" == "hybrid_32" ]; then
     exec ./hybrid_32 "$@"
 fi
 
+if [ "$1" == "hybrid_16" ]; then
+    shift  # Remove from arguments
+    cd /opt/sentineltouch/build
+    exec ./hybrid_16 "$@"
+fi
+
 # Check if first argument is "lenet5_16"
 if [ "$1" == "lenet5_16" ]; then
     shift  # Remove from arguments
