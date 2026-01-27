@@ -130,9 +130,9 @@ Run a Python evaluation script (inside `python/`):
 python3 python/pca_1_to_N_authentication.py    # The results of this script shows the accuracies reported in Table 2.
 ```
 
-`
+```
 python3 python3/exportAllWeights.py # export weights int the weights folder needed for encrypted inference
-`
+```
 
 
 #### Option B — Docker (recommended for reproducibility)
