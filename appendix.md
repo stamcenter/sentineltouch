@@ -128,7 +128,9 @@ python3 python/pca_1_to_N_authentication.py
 ```
 The results of this script shows you the accuracy reported in Table 2.
 
-
+`
+python3 python3/exportAllWeights.py # export weights int the weights folder needed for encrypted inference
+`
 
 
 #### Option B — Docker (recommended for reproducibility)
@@ -145,7 +147,7 @@ docker run sentineltouch lenet5_32 # run the full-pipeline with 32 embedding spa
 
 
 docker run sentineltouch python pca_1_to_N_authentication.py # run the python module for training and validation of model
-docker run sentineltouch python exportAllWeights.py # run the python module to export all weights
+# docker run sentineltouch python exportAllWeights.py # run the python module to export all weights
 ```
 
 Note: the `docker-entrypoint.sh` supports aliases such as `hybrid_16`, `hybrid_32`, `lenet5_16`, `lenet5_32`, and `python`.
@@ -172,7 +174,7 @@ docker run sentineltouch hybrid_16
 The repository contains scripts and binaries required to reproduce the main results in the paper:
 
 - Accuracy evaluation: use `python/pca_1_to_N_authentication.py` or the scripts in `python/` to train/evaluate on the provided validation splits.
-- Runtime and memory: measured by running the native binaries `hybrid_16`, `hybrid_32`, `lenet5_16`, `lenet5_32`; these binaries include internal logging for runtime counters.
+- Runtime and memory: measured by running the native binaries `hybrid_16`, `hybrid_32`, `lenet5_16`, `lenet5_32`; these binaries include internal logging for runtime counters. To measure the memory, you can use `htop` and record the highest memory usage for the process.
 
 See `python/metadata/` and `results/` for example outputs and expected result formats used in the paper.
 
@@ -190,7 +192,7 @@ Though not directly evaluated, we provide `python/raspberry_pi_evaluation/` for 
 This section documents how others can reuse components of SentinelTouch in their own work.
 
 - **Modular design:** The repository separates preprocessing, model training, and HE inference. Reuse the preprocessing pipeline (`python/utils` and `python/*_dataset.py`) to produce compact embeddings for other models.
-- **Models and weights:** Trained model weights are stored in `trained_models/`. You can load these weights to run evaluation or adapt them to transfer-learning experiments.
+<!-- - **Models and weights:** Trained model weights are stored in `trained_models/`. You can load these weights to run evaluation or adapt them to transfer-learning experiments. -->
 - **HE integration:** The HE interface is implemented using OpenFHE. The project includes example parameter sets and wrapper code to adapt other models to HE by replacing the inference core with a compatible implementation.
 - **Extending pipelines:** To add a new network or change embedding size:
   1. Add a new model in `python/` and implement a small wrapper to export weights in the same format as the existing loaders.
