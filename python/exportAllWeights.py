@@ -4,6 +4,9 @@ import csv
 from itertools import product
 from utils.blindmatch_model import BlindMatchModel
 from utils.lenet5 import lenet5
+from datetime import datetime
+import torch.nn as nn
+
 
 # Your configuration lists
 embedding_spaces = [16, 32]
@@ -11,10 +14,10 @@ datasets = ['polyu']
 model_types = ['lenet5']
 
 # Current date for file naming
-# current_date = datetime.now().strftime('%Y-%m-%d')
-current_date = "2025-08-24"
+current_date = datetime.now().strftime('%Y-%m-%d')
+# current_date = "2025-08-24"
 
-import torch.nn as nn
+
 
 def fold_bn_into_conv(conv, bn):
     """Fold BatchNorm2d into a preceding Conv2d."""

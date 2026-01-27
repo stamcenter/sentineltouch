@@ -4,7 +4,6 @@ from datetime import datetime
 import os
 import csv
 
-
 def train_model(model, train_dataloader, arcface, criterion, optimizer, val_loader=None, scheduler=None, num_epochs=10, device: torch.device = torch.device('cpu'), model_name=datetime.now().strftime('%Y-%m-%d')):
 	for epoch in range(num_epochs):
 		
@@ -43,7 +42,9 @@ def train_model(model, train_dataloader, arcface, criterion, optimizer, val_load
 	print(f"  Loss: {total_loss / len(train_dataloader.dataset):.4f}")
 	# print(f"  AUC Score:  {auc * 100:.4f}")
 
-	torch.save(model.state_dict(), f"./../trained_models/sentinal_1_to_N_{model_name}.pth")
+	save_path = f"./../trained_models/sentinal_1_to_N_{model_name}.pth"
+	os.makedirs(os.path.dirname(save_path), exist_ok=True)
+	torch.save(model.state_dict(), save_path)
 
 def evaluate_1n_model(model, test_loader, device="cpu", mode = "threshold"):
 	model.eval()

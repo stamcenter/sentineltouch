@@ -53,6 +53,7 @@ batch_size = 256
 
 # Model's seem to be struggling or taking a long time to initally learn when using smaller embeddings spaces.
 embedding_space = 16
+num_epochs = 100
 
 scaler = StandardScaler()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -65,7 +66,7 @@ lenet5_channels = [6, 16, 256, 120, 84]
 ##################################    PolyU    ############################################
 ###########################################################################################
 
-num_epochs = 100
+# num_epochs = 100
 train_transform = transforms.Compose([
     torchvision.transforms.RandomRotation(20),
     torchvision.transforms.ToTensor(),
@@ -203,8 +204,7 @@ validation_loader = DataLoader(
 # ##################################    Sokoto    ###########################################
 # ###########################################################################################
 
-num_epochs = 250
-
+# num_epochs = 250
 train_transform = transforms.Compose([
     torchvision.transforms.RandomRotation(20),
     torchvision.transforms.Resize((96, 108)),
