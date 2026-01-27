@@ -125,6 +125,12 @@ int main(int argc, char *argv[]) {
 
    for (int outer = 0; outer < operationCount; outer++) {
         string imagesFld = filesDirName+"/"+operation;
+        if (operation == "register") {
+            cout << "\n##################################### REGISTRATION  ##########################\n" << endl;
+        }
+        else {
+            cout << "\n##################################### IDENTIFICATION  ##########################\n" << endl;
+        }
         for (int idx = INDEX_VALUE; idx < NUM_TO_READ; idx++) {
             /************************************************************************************************ */
             vector<double> readInput = load_user_input(imagesFld, idx);
@@ -174,7 +180,6 @@ int main(int argc, char *argv[]) {
             measuringTime.clear();
         }
         operation = "authenticate";
-        cout << "\n##################################### IDENTIFICATION  ##########################\n" << endl;
     }
    return 0;
 }

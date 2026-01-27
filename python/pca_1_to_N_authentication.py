@@ -79,33 +79,13 @@ validationset = PolyUDatasetContactless(root_dir=polyu_location, type='val', tra
 dataset_name = "polyu"
 num_ids = 400
 
-# ###########################################################################################
-# ##################################    Sokoto    ###########################################
-# ###########################################################################################
 
-# num_epochs = 250
-
-# train_transform = transforms.Compose([
-#     torchvision.transforms.RandomRotation(20),
-#     torchvision.transforms.Resize((96, 108)),
-#     torchvision.transforms.ToTensor(),
-#     torchvision.transforms.Normalize((0.5), (1.0)),
-# ])
-
-# scoofing_db = "./../images/SCOOF_DB/SOCOFing/Real"
-# labels_file="./metadata/sokoto_meta.txt"
-# sokoto = SOKOTODataset(root_dir=scoofing_db, labels_file=labels_file, transform=train_transform)
-# trainset, validationset = train_test_split(
-#     sokoto, test_size=0.4, random_state=seed, shuffle=True
-# )
-
-# num_ids = 600
-# dataset_name = "sokoto"
 
 ###########################################################################################
 ##################################    END    ##############################################
 ###########################################################################################
 
+print("Training on PolyU Dataset:")
 if PCA_ENABLED:
     pca_elements = 784
     # pca_elements = 0.95
@@ -170,6 +150,149 @@ optimizer = torch.optim.Adam(split_weights(blind_match_model), lr=0.001)
 scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=num_epochs, eta_min=0.00001)
 current_date = datetime.now().strftime('%Y-%m-%d')
 
+print("Training a LeNet5 on the PolyU Dataset:")
+print("Number of training images:", len(trainset))
+print("Number of validation images:", len(validationset))
+
+
+train_model(
+    model=blind_match_model, 
+    train_dataloader=train_dataloader, 
+    arcface=arcface, 
+    criterion=criterion, 
+    optimizer=optimizer, 
+    val_loader=validation_loader, 
+    scheduler=scheduler, 
+    num_epochs=num_epochs,
+    device=device, 
+    model_name=f"pca_{dataset_name}_{model_type}_{embedding_space}_{current_date}"
+)
+blind_match_model.eval()
+evaluate_1n_model(blind_match_model, validation_loader, device)
+
+validation_loader = DataLoader(
+    validationset,
+    batch_size=1,
+    shuffle=False,
+    num_workers=6,
+    prefetch_factor=4,
+    persistent_workers=True,
+    pin_memory=True,
+    collate_fn=collate_fn
+)
+save_dir = "../embedding_csv"
+# save_embeddings(blind_match_model, train_dataloader, device, save_dir, dataset_name, embedding_space, model_type, "authenticate")
+
+print("\n\n")
+validation_loader = DataLoader(
+    validationset,
+    batch_size=1,
+    shuffle=False,
+    num_workers=6,
+    prefetch_factor=4,
+    persistent_workers=True,
+    pin_memory=True,
+    collate_fn=collate_fn
+)
+# save_embeddings(blind_match_model, validation_loader, device, save_dir, dataset_name, embedding_space, model_type, "register")
+
+
+
+
+# ###########################################################################################
+# ##################################    Sokoto    ###########################################
+# ###########################################################################################
+
+num_epochs = 250
+
+train_transform = transforms.Compose([
+    torchvision.transforms.RandomRotation(20),
+    torchvision.transforms.Resize((96, 108)),
+    torchvision.transforms.ToTensor(),
+    torchvision.transforms.Normalize((0.5), (1.0)),
+])
+
+scoofing_db = "./../images/SCOOF_DB/SOCOFing/Real"
+labels_file="./metadata/sokoto_meta.txt"
+sokoto = SOKOTODataset(root_dir=scoofing_db, labels_file=labels_file, transform=train_transform)
+trainset, validationset = train_test_split(
+    sokoto, test_size=0.4, random_state=seed, shuffle=True
+)
+
+num_ids = 600
+dataset_name = "sokoto"
+
+
+###########################################################################################
+##################################    training    #########################################
+###########################################################################################
+
+print("Training on SOKOTO Dataset:")
+if PCA_ENABLED:
+    # pca_elements = 784
+    pca_elements = 0.95
+
+    x, y = pca_data_construction(trainset)
+    x_pca, pca_model, total_pca, scaler = pca_generation(x, scaler, pca_elements)
+
+    def collate_fn(batch):
+        return pca_collate_fn(
+            batch,
+            pca_model,
+            scaler,
+            new_size,
+            return_components=False
+        )
+else:
+    collate_fn = None
+
+# -----------------------------------------------------
+# Make data loaders
+# -----------------------------------------------------
+train_dataloader = DataLoader(
+    trainset, 
+    batch_size=batch_size, 
+    shuffle=True,
+    num_workers=6,
+    prefetch_factor=4,
+    persistent_workers=True,
+    pin_memory=True,
+    collate_fn=collate_fn
+)
+
+validation_loader = DataLoader(
+    validationset,
+    batch_size=batch_size,
+    shuffle=False,
+    num_workers=6,
+    prefetch_factor=4,
+    persistent_workers=True,
+    pin_memory=True,
+    collate_fn=collate_fn
+)
+
+if model_type == "resnet18":
+    blind_match_model = BlindMatchModel(num_classes=embedding_space,
+                                        model_type='resnet18',
+                                        fc1_width=fc1_width, 
+                                        channels=resnet18_channels,
+                                        num_ids=num_ids
+                                    ).to(device)
+else:
+    blind_match_model = BlindMatchModel(num_classes=embedding_space,
+                                        model_type='lenet5',
+                                        fc1_width=fc1_width, 
+                                        channels=lenet5_channels,
+                                        num_ids=num_ids
+                                    ).to(device)
+
+arcface = ArcFace(m=0.2)
+criterion = nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(split_weights(blind_match_model), lr=0.001)
+scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=num_epochs, eta_min=0.00001)
+current_date = datetime.now().strftime('%Y-%m-%d')
+
+print("Training a LeNet5 on the sokoto Dataset:")
 print("Number of training images:", len(trainset))
 print("Number of validation images:", len(validationset))
 

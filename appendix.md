@@ -95,7 +95,7 @@ sudo make install
 ## Setup SentinelTouch using this command:
 
 ```
-git clone http://gitlab.ascslab-members.org/ngesbrian/sentineltouch.git
+git clone https://github.com/stamcenter/sentineltouch.git
 cd sentineltouch
 mkdir build
 cd build
@@ -109,12 +109,26 @@ Run the build from the SentinelTouch for results
 ```
 ./hybrid_16
 ```
+Each binary produces the following outputs:
+
+- It begins by displaying the CKKS crypto context parameters used in this work.
+- It reports the required rotation keys that are generated, stored, and used for both registration and identification.
+- It loads the model weights when required.
+- It registers users into the encrypted database. For each user during registration, the time required for feature extraction and registration is reported.
+- During the identification phase, for each user, the output indicates whether the user was correctly predicted. It also reports the time required to identify the user and the time required to interpret the results.
+
+These results are summarized in Table 3 and Table 4.
+
 
 Run a Python evaluation script (inside `python/`):
+
 
 ```
 python3 python/pca_1_to_N_authentication.py
 ```
+The results of this script shows you the accuracy reported in Table 2.
+
+
 
 
 #### Option B — Docker (recommended for reproducibility)

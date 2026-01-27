@@ -228,6 +228,12 @@ int main(int argc, char *argv[]) {
     }
 
    for (int outer = 0; outer < operationCount; outer++) {
+         if (operation == "register") {
+            cout << "\n##################################### REGISTRATION  ##########################\n" << endl;
+        }
+        else {
+            cout << "\n##################################### IDENTIFICATION  ##########################\n" << endl;
+        }    
         string imagesFld = filesDirName+"/"+operation;
         for (int idx = INDEX_VALUE; idx < NUM_TO_READ; idx++) {
             /************************************************************************************************ */
@@ -347,7 +353,6 @@ int main(int argc, char *argv[]) {
         // }
 
         operation = "authenticate";
-        cout << "\n##################################### IDENTIFICATION  ##########################\n" << endl;
     }
     outFile.close();
     cout << "All predicted results printed to File." << endl;
